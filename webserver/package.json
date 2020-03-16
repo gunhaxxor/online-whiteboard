@@ -1,0 +1,19 @@
+{
+  "name": "online-whiteboard-server",
+  "version": "1.0.0",
+  "description": "server for handling the backend of online-whiteboard",
+  "main": "server.js",
+  "scripts": {
+    "postinstall": "npm install --prefix vue-frontend && npm run build --prefix vue-frontend",
+    "start": "node server.js",
+    "build-and-run": "npm run build --prefix vue-frontend && npm run start"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "internal-ip": "^6.0.0",
+    "request": "^2.88.0",
+    "socket.io": "^2.3.0"
+  }
+}
