@@ -1,34 +1,25 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
-import Whiteboard from "@/views/Whiteboard.vue";
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import Whiteboard from '@/views/Whiteboard.vue';
+import BoardCreator from '@/views/BoardCreator.vue';
 
 Vue.use(VueRouter);
 
 const routes = [
   {
-    path: "/board",
-    name: "whiteboard",
+    path: '/:sessionName',
+    name: 'whiteboard',
     component: Whiteboard
   },
   {
-    path: "/",
-    name: "Home",
-    component: Home
-  },
-  {
-    path: "/about",
-    name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue")
+    path: '/',
+    name: 'boardCreator',
+    component: BoardCreator
   }
 ];
 
 const router = new VueRouter({
-  mode: "history",
+  mode: 'history',
   base: process.env.BASE_URL,
   routes
 });

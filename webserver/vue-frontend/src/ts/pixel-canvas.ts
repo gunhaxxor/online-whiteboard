@@ -1,48 +1,61 @@
-import p5 from "p5";
-import store from "@/store/index";
+import p5 from 'p5';
+import store from '@/store/index';
+import { sendMessage } from '@/ts/socket';
 
 let canvas: p5.Renderer;
 
-let brushStrokes: p5.Vector[][] = [];
+const brushStrokes: p5.Vector[][] = [];
+
+const brushSize = 15;
 
 export default function(p: p5) {
   // NOTE: Set up is here
   p.setup = () => {
     console.log(store.state);
     p.angleMode(p.DEGREES);
-    // p.frameRate(30);
+    p.frameRate(30);
     p.noiseDetail(2, 0.5);
 
     // p.noStroke();
     p.stroke(0);
     p.background(255, 255, 255);
+
+    // p.noCursor();
+    p.cursor(p.CROSS);
     // size = 110;
     // p.pixelDensity(0.1);
     canvas = p.createCanvas(p.windowWidth, p.windowHeight);
     canvas.mousePressed(() => {
-      console.log("adding a new brushStroke");
-      let brushStroke = [p.createVector(p.mouseX, p.mouseY)];
+      console.log('adding a new brushStroke');
+      const brushStroke = [p.createVector(p.mouseX, p.mouseY)];
       brushStrokes.push(brushStroke);
     });
   };
 
   // NOTE: Draw is here
   p.draw = () => {
+    p.background(255);
     p.fill(0);
+    p.noStroke();
+    // console.log(brushSize);
+    p.circle(p.mouseX, p.mouseY, brushSize);
 
     if (p.mouseIsPressed) {
-      console.log(brushStrokes);
+      // console.log(brushStrokes);
       if (brushStrokes.length) {
         brushStrokes[brushStrokes.length - 1].push(
           p.createVector(p.mouseX, p.mouseY)
         );
       }
       // p.circle(p.mouseX, p.mouseY, 20);
-      store.commit("setBrushStrokes", brushStrokes);
+      store.commit('setBrushStrokes', brushStrokes);
+      // sendMessage({ strokes: brushStrokes });
+      sendMessage('teeest');
     }
 
-    for (let brushStroke of brushStrokes) {
-      p.strokeWeight(10);
+    for (const brushStroke of brushStrokes) {
+      p.stroke(0);
+      p.strokeWeight(brushSize);
       if (brushStroke.length > 1) {
         p.beginShape(p.LINES);
         for (let i = 1; i < brushStroke.length; i++) {
@@ -64,7 +77,7 @@ export default function(p: p5) {
   // };
 
   p.windowResized = () => {
-    console.log("window resized!!");
+    console.log('window resized!!');
     p.resizeCanvas(p.windowWidth, p.windowHeight);
   };
 }

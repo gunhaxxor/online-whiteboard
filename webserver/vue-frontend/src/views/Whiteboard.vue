@@ -2,34 +2,39 @@
   <div id="p5-canvas-slot"></div>
 </template>
 
-<script>
+<script lang='js'>
 // @ is an alias to /src
-import { mapState, mapActions } from "vuex";
-import p5 from "p5";
+import { mapState, mapMutations } from 'vuex';
+import p5 from 'p5';
 
-import pixelCanvas from "@/ts/pixel-canvas";
+import pixelCanvas from '@/ts/pixel-canvas';
+import { initWebSocket } from '@/ts/socket';
+
 
 export default {
-  name: "whiteboard",
+  name: 'whiteboard',
   data() {
     return {
       sketch: undefined
     };
   },
   methods: {
-    // ...mapActions(["addElement"])
+    ...mapMutations(['setSessionName'])
   },
   mounted() {
-    console.log("mounted");
+    console.log('mounted');
+    console.log('sessionName: ', this.$route.params.sessionName);
+    this.setSessionName(this.$route.params.sessionName);
     this.sketch = new p5(
       pixelCanvas,
-      document.querySelector("#p5-canvas-slot")
+      document.querySelector('#p5-canvas-slot')
     );
+    initWebSocket();
   },
   beforeDestroy() {
-    console.log("before destroy");
+    console.log('before destroy');
     if (this.sketch) {
-      console.log("P5 sketch present. DELETING");
+      console.log('P5 sketch present. DELETING');
       this.sketch.remove();
     }
   },

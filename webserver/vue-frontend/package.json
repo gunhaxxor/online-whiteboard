@@ -10,6 +10,7 @@
   "dependencies": {
     "@types/p5": "^0.9.0",
     "core-js": "^3.6.4",
+    "material-components-vue": "^1.2.0",
     "p5": "^1.0.0",
     "register-service-worker": "^1.6.2",
     "vue": "^2.6.11",
@@ -17,6 +18,8 @@
     "vuex": "^3.1.2"
   },
   "devDependencies": {
+    "@types/socket.io": "^2.1.4",
+    "@types/socket.io-client": "^1.4.32",
     "@vue/cli-plugin-babel": "^4.2.0",
     "@vue/cli-plugin-pwa": "^4.2.0",
     "@vue/cli-plugin-typescript": "^4.2.0",
