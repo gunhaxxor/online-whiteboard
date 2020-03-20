@@ -25,7 +25,10 @@ export default {
     console.log('mounted');
     console.log('sessionName: ', this.$route.params.sessionName);
     this.setSessionName(this.$route.params.sessionName);
-    connectedPromise.then(() => emitAcked('joinRoomRequest', this.$route.params.sessionName).then((response) => console.log(response)));
+    connectedPromise.then(() => {
+      emitAcked('joinRoomRequest', this.$route.params.sessionName)
+      .then((response) => console.log(response));
+      });
     this.sketch = new p5(
       pixelCanvas,
       document.querySelector('#p5-canvas-slot')

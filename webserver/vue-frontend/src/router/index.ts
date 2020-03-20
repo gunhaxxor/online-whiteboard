@@ -2,10 +2,16 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Whiteboard from '@/views/Whiteboard.vue';
 import BoardCreator from '@/views/BoardCreator.vue';
+import BoardChooser from '@/views/BoardChooser.vue';
 
 Vue.use(VueRouter);
 
 const routes = [
+  {
+    path: '/',
+    name: 'boardChooser',
+    component: BoardChooser
+  },
   {
     path: '/skapa',
     name: 'boardCreator',

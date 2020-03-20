@@ -8,7 +8,7 @@ let brushStrokes: any[][] = store.state.brushStrokes;
 
 const brushSize = 15;
 
-let previousBrushPos;
+let previousBrushPos: any;
 
 export default function(p: p5) {
   // NOTE: Set up is here
@@ -68,7 +68,7 @@ export default function(p: p5) {
       }
     }
 
-    if (brushStrokes.length)
+    if (brushStrokes.length) {
       for (const brushStroke of brushStrokes) {
         p.stroke(0);
         p.strokeWeight(brushSize);
@@ -81,6 +81,7 @@ export default function(p: p5) {
           p.endShape();
         }
       }
+    }
   };
 
   // p.keyPressed = () => {

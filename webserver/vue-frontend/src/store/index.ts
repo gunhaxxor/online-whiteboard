@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
-let startState: {
+const startState: {
   brushStrokes: any[][];
   isSessionOwner: false;
   sessionName: '';
