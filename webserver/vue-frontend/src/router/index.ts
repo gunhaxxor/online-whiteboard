@@ -7,14 +7,14 @@ Vue.use(VueRouter);
 
 const routes = [
   {
+    path: '/skapa',
+    name: 'boardCreator',
+    component: BoardCreator
+  },
+  {
     path: '/:sessionName',
     name: 'whiteboard',
     component: Whiteboard
-  },
-  {
-    path: '/',
-    name: 'boardCreator',
-    component: BoardCreator
   }
 ];
 

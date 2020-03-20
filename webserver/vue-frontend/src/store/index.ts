@@ -3,12 +3,18 @@ import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
+let startState: {
+  brushStrokes: any[][];
+  isSessionOwner: false;
+  sessionName: '';
+} = {
+  brushStrokes: [],
+  isSessionOwner: false,
+  sessionName: ''
+};
+
 export default new Vuex.Store({
-  state: {
-    brushStrokes: Array<any>(),
-    isSessionOwner: false,
-    sessionName: ''
-  },
+  state: startState,
   mutations: {
     setBrushStrokes(state, brushStrokes) {
       state.brushStrokes = brushStrokes.slice();

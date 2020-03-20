@@ -6,9 +6,13 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import { initWebSocket } from '@/ts/socket';
 
 export default Vue.extend({
   name: 'App',
+  mounted() {
+    initWebSocket();
+  },
   components: {}
 });
 </script>

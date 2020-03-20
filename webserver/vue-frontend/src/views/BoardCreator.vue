@@ -1,42 +1,91 @@
 <template>
   <div class="center-container">
-    <m-text-field
-      v-model="namePrefix"
-      outlined
-      maxlength="15"
-      id="my-text-field"
-      aria-label="Välj unikt namn"
-    >
-      <m-line-ripple slot="bottomLine" />
-    </m-text-field>
+    <md-field id="name-input">
+      <label>Namn</label>
+      <md-input v-model="namePrefix"></md-input>
+      <!-- <input type="text" /> -->
+    </md-field>
+
     <span id="suffix">
-      {{ nameSuffix }}
+      {{ nameSuffix ? betweenWords + nameSuffix : "" }}
     </span>
-    <m-button raised @click="createBoard">Skapa whiteboard</m-button>
+    <md-button
+      @click="requestHaiku"
+      id="regenerate-haiku-button"
+      class="md-icon-button"
+    >
+      <md-icon>refresh</md-icon>
+    </md-button>
+    <md-button
+      :disabled="namePrefix == '' || nameSuffix == ''"
+      @click="createBoard"
+      class="md-raised md-primary"
+      >Skapa whiteboard</md-button
+    >
   </div>
 </template>
 
-<script lang="js">
-import Button from 'material-components-vue/dist/button';
-import TextField from 'material-components-vue/dist/text-field';
-import Vue from 'vue';
-Vue.use(Button);
-Vue.use(TextField);
+<script>
+import { emitAcked, connectedPromise } from "@/ts/socket";
+import Vue from "vue";
+import { MdButton, MdField } from "vue-material/dist/components";
+import "vue-material/dist/vue-material.min.css";
+import "vue-material/dist/theme/default.css";
+
+import { mapMutations } from "vuex";
+
+Vue.use(MdButton);
+Vue.use(MdField);
 export default {
-  name: 'BoardCreator',
+  name: "BoardCreator",
   data() {
     return {
-      namePrefix: '',
-      nameSuffix: ''
+      text: "teeeest",
+      namePrefix: "",
+      betweenWords: "-är-en-",
+      nameSuffix: ""
     };
+  },
+  computed: {
+    sessionName() {
+      return (
+        this.namePrefix.toLowerCase() + this.betweenWords + this.nameSuffix
+      );
+    }
   },
   methods: {
     createBoard() {
-      console.log('creating board');
-    }
+      console.log("creating board");
+
+      emitAcked("createSessionRequest", this.sessionName)
+        .then(response => {
+          console.log("createSessionRequest responded: ", response);
+          if (response) {
+            this.setIsSessionOwner(true);
+            // this.setSessionName(this.sessionName);
+            this.$router.push({
+              name: "whiteboard",
+              params: { sessionName: this.sessionName }
+            });
+          } else {
+            requestHaiku();
+          }
+        })
+        .catch(e => console.error(e));
+    },
+    requestHaiku() {
+      emitAcked("haikunateRequest").then(data => {
+        this.nameSuffix = data;
+      });
+    },
+    ...mapMutations(["setIsSessionOwner", "setSessionName"])
   },
   mounted() {
-    this.nameSuffix = '-liten-blomma-' + Math.floor(Math.random() * 11);
+    console.log("BoardCreator mounted");
+    // this.nameSuffix = '-liten-blomma-' + Math.floor(Math.random() * 11);
+    connectedPromise.then(() => {
+      this.requestHaiku();
+    });
   }
 };
 </script>
@@ -49,10 +98,13 @@ export default {
   justify-content: center;
   align-items: center;
 }
-#suffix {
+
+#name-input {
+  width: 15rem;
+}
+
+#regenerate-haiku-button {
   margin-left: 0.3rem;
   margin-right: 2rem;
 }
-@import "material-components-vue/dist/button/styles";
-@import "material-components-vue/dist/text-field/styles";
 </style>
